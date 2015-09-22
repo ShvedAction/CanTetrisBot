@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CanTetris</title>
+  
+  <script src="can/jquery-1.11.3.min.js"></script>
+  <script src="can/can.jquery.js"></script>
+  
+  <!-- include source files here... -->
+  <script src="CanTetris.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script type="text/mustache" id="templateOfField">
+      {{#each .}}
+          <div class="cell {{style_class}}"></div>
+      {{/each}}
+  </script>
+  <script type="text/mustache" id="templateOfStatusGame">
+      <h3>Состояние игры</h3>
+      <p><strong>score</strong>:{{score}}</p>
+      <p><strong>countFigure</strong>:{{countFigure}}</p>
+      <p><strong>status</strong>:{{status}}</p>
+  </script>
+</head>
+
+    
+<body>
+
+<div id="wrapper">
+    <h1>Tetris on CanJS</h1>
+    <div id="field">
+        
+    </div>
+    <div id="status">
+        s
+    </div>
+ </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+div{
+    display: block;
+}
+
+#field {
+    height:100%;
+    background-color: #000000;
+    width:200px;
+    overflow:hidden;
+    float:left;
+    margin-top: 20px;
+}
+#wrapper {
+    height:100%;
+    overflow:hidden;
+    margin:auto;
+    width:450px;
+}
+p{
+    margin:0;
+}
+h1{
+    margin: auto;
+    display: block;
+    overflow: hidden;
+    margin-left: auto;
+    width: 225px;
+    margin-bottom: 20px;
+}
+#status{
+    float: right;
+    margin-left:50px;
+}
+.cell{
+    /*width:20px;
+    height:20px;*/
+    width:18px;
+    height:18px;
+    margin:1px;
+    float: left;
+}
+.empty{
+    background-color:#fff;
+}
+.red{
+    background-color:#ff0000;
+}
+.green{
+    background-color:#008800;
+}
+.blue{
+    background-color:#0000cc;
+}
+.brown{
+    background-color:#964B00;
+}
+.yellow{
+    background-color:#bbbb00;
+}
