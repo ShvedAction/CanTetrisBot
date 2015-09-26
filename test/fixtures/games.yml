@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 
+  number: 1
+  points: 1
+  start_time: 2015-09-26 10:35:53
+  end_time: 2015-09-26 10:35:53
+
+two:
+  user_id: 
+  number: 1
+  points: 1
+  start_time: 2015-09-26 10:35:53
+  end_time: 2015-09-26 10:35:53
