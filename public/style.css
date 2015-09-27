@@ -10,11 +10,19 @@ div{
     float:left;
     margin-top: 20px;
 }
+#fieldShifr {
+    height:100%;
+    background-color: #000000;
+    width:200px;
+    overflow:hidden;
+    float:left;
+    margin: 20px;
+}
 #wrapper {
     height:100%;
     overflow:hidden;
     margin:auto;
-    width:450px;
+    width:750px;
 }
 p{
     margin:0;

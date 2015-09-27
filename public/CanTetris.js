@@ -1,5 +1,5 @@
 var Figure, field, game, figure, ALL_TYPE_FIGURE;
-var fieldHeight = 30, fieldWidth = 10;
+var fieldHeight = 30, fieldWidth = 10, fromShifr;
 $(document).ready(function () {
     game = new (can.Model.extend({}, {
         score: 0,
@@ -137,8 +137,10 @@ $(document).ready(function () {
 
     //create field
     field = new can.List([]);
-    for (var i = 0; i < (fieldHeight * fieldWidth); i++) {
-        field.attr(i, new can.Model({style_class: "empty", state: "empty"}));
+    field.fillCleanCell = function(){
+        for (var i = 0; i < (fieldHeight * fieldWidth); i++) {
+            this.attr(i, new can.Model({style_class: "empty", state: "empty"}));
+        }
     }
     field.getXY = function (x, y) {
         if ((x >= 0) && (x < fieldWidth) && (y >= 0) && (y < fieldHeight)) {
@@ -189,10 +191,49 @@ $(document).ready(function () {
         console.log(resultHash);
         resultHash = resultHash.replace(/\++$/,'');
         console.log(resultHash);
+        fromShifr.fill(resultHash);
         $.post("/new_step",{hash: resultHash, number_figure: game.countFigure, points: game.score});
     };
+    field.fillCleanCell();
 
+    fromShifr = new can.List([]);
+    fromShifr.fillCleanCell = field.fillCleanCell;
+    fromShifr.fillCleanCell();
+    fromShifr.fill = function(shifr){
+        for (var i = 0; i < (fieldHeight * fieldWidth); i++) {
+            this.attr(i).attr("style_class", "empty");
+            this.attr(i).attr("state", "empty");
+        }        
+        var indexCell = fieldHeight*fieldWidth-1;
+        for(var i = 0; i< shifr.length; i++){
+            var sum = shifr.charCodeAt(i) - 43;
+            var deshif = sum.toString(3);
+            if (deshif.length > 4)
+                throw "sum is incorect";
+            var le = deshif.length;
+            for(var j = 0; j < (4 - le); j++) deshif = "0"+deshif;
+            for(var j = 3; j >= 0; j--){
+                var obj = {};
+                switch(deshif[j]){
+                    case '0':
+                        obj = {style_class: "empty", state: "empty"};
+                        break
+                    case '1':
+                        obj = {style_class: "red", state: "red"};
+                        break
+                    case '2':
+                        obj = {style_class: "blue", state: "empty"};                        
+                }
+                this.attr(indexCell).attr("style_class", obj.style_class);
+                this.attr(indexCell).attr("state", obj.state);
+                indexCell--;
+            }
+        }
+    };
+
+    fromShifr.fill("");
     $("#field").html(can.view('templateOfField', field));
+    $("#fieldShifr").html(can.view('templateOfField', fromShifr));
     $("#status").html(can.view('templateOfStatusGame', game));
 
     game.start();
