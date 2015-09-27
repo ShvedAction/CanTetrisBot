@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  
+  get "new_step" => "step#new_step"
+  post "new_step" => "step#new_step"
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
