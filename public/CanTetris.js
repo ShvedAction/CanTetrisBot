@@ -5,17 +5,45 @@ $(document).ready(function () {
         score: 0,
         countFigure: 0,
         status: "none",
+        toggelStatus: "Pause",
+        togelStatusEnabled: "",
+        init: function () {
+            this.on("change", function (ev, value) {
+                if (value === "status") {
+                    switch (this.status)
+                    {
+                        case "in game":
+                            this.attr("toggelStatus", "Pause");
+                            this.attr("togelStatusEnabled", "");
+                            this.set_period_come_down();
+                            $(document).delegate("*", "keydown", controlKeyEvent);
+                            break;
+                        case "stop":
+                            this.attr("toggelStatus", "Resume");
+                            this.attr("togelStatusEnabled", "");
+                            this.stop();
+                            break;
+                        case "over":
+                            this.attr("toggelStatus", "Pause");
+                            this.attr("togelStatusEnabled", "disabled");
+                            this.stop();
+                            break;
+                    }
+                }
+            });
+        },
         gameOver: function () {
-            clearInterval(this.intervalId);
-            $(document).undelegate("*", "keydown", controlKeyEvent);
             this.attr("status", "over");
         },
         start: function () {
+            field.cleanCell();
             this.nextFigure();
             figure.come_down();
             this.attr("score", 0);
             this.attr("countFigure", 0);
             this.attr("status", "in game");
+        },
+        set_period_come_down: function () {
             this.intervalId = setInterval(function () {
                 figure.come_down();
             }, 1000);
@@ -26,8 +54,17 @@ $(document).ready(function () {
         },
         stop: function () {
             clearInterval(this.intervalId);
-            this.attr("status", "stop");
             $(document).undelegate("*", "keydown", controlKeyEvent);
+        },
+        toggelStop: function () {
+            switch (this.status) {
+                case "in game":
+                    this.attr("status", "stop");
+                    break;
+                case "stop":
+                    this.attr("status", "in game");
+                    break;
+            }
         }
     }))({});
     ALL_TYPE_FIGURE = [
@@ -137,11 +174,17 @@ $(document).ready(function () {
 
     //create field
     field = new can.List([]);
-    field.fillCleanCell = function(){
+    field.fillCleanCell = function () {
         for (var i = 0; i < (fieldHeight * fieldWidth); i++) {
             this.attr(i, new can.Model({style_class: "empty", state: "empty"}));
         }
-    }
+    };
+    field.cleanCell = function () {
+        for (var i = 0; i < (fieldHeight * fieldWidth); i++) {
+            this.attr(i).attr("style_class", "empty");
+            this.attr(i).attr("state", "empty");
+        }
+    };
     field.getXY = function (x, y) {
         if ((x >= 0) && (x < fieldWidth) && (y >= 0) && (y < fieldHeight)) {
             return this.attr(fieldHeight * fieldWidth - (y * fieldWidth + x) - 1);
@@ -173,48 +216,47 @@ $(document).ready(function () {
         }
         return quantety;
     };
-    field.save_step = function(){
+    field.save_step = function () {
         var resultHash = "";
         var number_position = 0; //разряд
         var sum = 0;
-        for(var i = fieldHeight*fieldWidth-1; i>=0; i--){
+        for (var i = fieldHeight * fieldWidth - 1; i >= 0; i--) {
             var cell = this.attr(i);
-            var valField = (cell.state != "empty"? 1 : (cell.style_class != "empty" ? 2 : 0));
-            sum += Math.pow(3 , number_position) * valField;
+            var valField = (cell.state != "empty" ? 1 : (cell.style_class != "empty" ? 2 : 0));
+            sum += Math.pow(3, number_position) * valField;
             number_position++;
-            if (number_position == 4){
-                resultHash += String.fromCharCode(sum+43);
+            if (number_position == 4) {
+                resultHash += String.fromCharCode(sum + 43);
                 sum = 0;
                 number_position = 0;
             }
         }
         console.log(resultHash);
-        resultHash = resultHash.replace(/\++$/,'');
+        resultHash = resultHash.replace(/\++$/, '');
         console.log(resultHash);
         fromShifr.fill(resultHash);
-        $.post("/new_step",{hash: resultHash, number_figure: game.countFigure, points: game.score});
+        $.post("/new_step", {hash: resultHash, number_figure: game.countFigure, points: game.score});
     };
-    field.fillCleanCell();
+
 
     fromShifr = new can.List([]);
     fromShifr.fillCleanCell = field.fillCleanCell;
+    fromShifr.cleanCell = field.cleanCell;
     fromShifr.fillCleanCell();
-    fromShifr.fill = function(shifr){
-        for (var i = 0; i < (fieldHeight * fieldWidth); i++) {
-            this.attr(i).attr("style_class", "empty");
-            this.attr(i).attr("state", "empty");
-        }        
-        var indexCell = fieldHeight*fieldWidth-1;
-        for(var i = 0; i< shifr.length; i++){
+    fromShifr.fill = function (shifr) {
+        fromShifr.cleanCell();
+        var indexCell = fieldHeight * fieldWidth - 1;
+        for (var i = 0; i < shifr.length; i++) {
             var sum = shifr.charCodeAt(i) - 43;
             var deshif = sum.toString(3);
             if (deshif.length > 4)
                 throw "sum is incorect";
             var le = deshif.length;
-            for(var j = 0; j < (4 - le); j++) deshif = "0"+deshif;
-            for(var j = 3; j >= 0; j--){
+            for (var j = 0; j < (4 - le); j++)
+                deshif = "0" + deshif;
+            for (var j = 3; j >= 0; j--) {
                 var obj = {};
-                switch(deshif[j]){
+                switch (deshif[j]) {
                     case '0':
                         obj = {style_class: "empty", state: "empty"};
                         break
@@ -222,7 +264,7 @@ $(document).ready(function () {
                         obj = {style_class: "red", state: "red"};
                         break
                     case '2':
-                        obj = {style_class: "blue", state: "empty"};                        
+                        obj = {style_class: "blue", state: "empty"};
                 }
                 this.attr(indexCell).attr("style_class", obj.style_class);
                 this.attr(indexCell).attr("state", obj.state);
@@ -236,6 +278,7 @@ $(document).ready(function () {
     $("#fieldShifr").html(can.view('templateOfField', fromShifr));
     $("#status").html(can.view('templateOfStatusGame', game));
 
+    field.fillCleanCell();
     game.start();
     var onceClickOnceEvent = true;
     function controlKeyEvent(key) {
@@ -258,5 +301,5 @@ $(document).ready(function () {
         }
 
     }
-    $(document).delegate("*", "keydown", controlKeyEvent);
+    //$(document).delegate("*", "keydown", controlKeyEvent);
 });
