@@ -282,7 +282,7 @@ $(document).ready(function () {
 
     fromShifr.fill("");
     $("#field").html(can.view('templateOfField', field));
-    $("#fieldShifr").html(can.view('templateOfField', fromShifr));
+    //$("#fieldShifr").html(can.view('templateOfField', fromShifr));
     $("#status").html(can.view('templateOfStatusGame', game));
 
     field.fillCleanCell();
