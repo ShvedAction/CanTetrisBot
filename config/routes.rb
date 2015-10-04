@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get "game/new" =>"step#new_game"  
   get "game/over" =>"step#game_over"  
   post "game/edit" =>"step#edit_game"  
+  get "user" =>"step#get_user"  
+  post "user/edit" =>"step#edit_user"  
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

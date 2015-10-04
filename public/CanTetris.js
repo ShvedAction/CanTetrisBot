@@ -1,6 +1,38 @@
 var Figure, field, game, figure, ALL_TYPE_FIGURE;
 var fieldHeight = 30, fieldWidth = 10, fromShifr;
+var user;
 $(document).ready(function () {
+    var User = can.Model.extend({
+        findOne: 'GET user',
+        create: 'POST user/edit',
+        update: 'POST user/edit'
+    }, {
+        init: function(){
+            this.on("change",function(event, key_of_val){
+                if(key_of_val === "updated" ||key_of_val === "updated_at")
+                    return;
+                this.save();
+                game.toggelStop();
+            })
+        },
+        user_key_up: function(somethink, element, event){
+            if (event.keyCode == 13){
+                element.blur()
+            }
+        }
+
+    });
+
+    User.findOne({},function(u){
+        game.attr("game_user", u);
+    });
+
+    can.Component.extend({
+        tag: "user-info",
+        template: "{{#if target}}<input type='text' can-keyup='target.user_key_up' can-value='target.nik' can-click='pause' can-focusin='pause' can-focusout='resume' />{{/if}}",
+        scope: {}
+    });
+
     game = new (can.Model.extend({
         update: 'POST game/edit',
         create: 'POST game/edit'
@@ -32,7 +64,7 @@ $(document).ready(function () {
                             this.stop();
                             break;
                     }
-                }else if(value === "points"){
+                } else if (value === "points") {
                     this.save();
                 }
             });
@@ -63,13 +95,19 @@ $(document).ready(function () {
             clearInterval(this.intervalId);
             $(document).undelegate("*", "keydown", controlKeyEvent);
         },
+        pause: function(){
+            this.attr("status", "stop");
+        },
+        resume: function(){
+            this.attr("status", "in game");
+        },
         toggelStop: function () {
             switch (this.status) {
                 case "in game":
-                    this.attr("status", "stop");
+                    this.pause();
                     break;
                 case "stop":
-                    this.attr("status", "in game");
+                    this.resume();
                     break;
             }
         }

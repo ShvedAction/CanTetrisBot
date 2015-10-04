@@ -17,11 +17,12 @@
   </script>
   <script type="text/mustache" id="templateOfStatusGame">
       <h3>Состояние игры</h3>
-      <p><strong>points</strong>:{{points}}</p>
-      <p><strong>countFigure</strong>:{{countFigure}}</p>
-      <p><strong>status</strong>:{{status}}</p>
-      <p><button can-click='toggelStop' {{togelStatusEnabled}}>{{toggelStatus}}</button></p>
-      <p><button can-click='start'>New game</button></p>
+      <p><user-info target='game_user'></user-info></p>
+      <p><strong>points</strong>:<i class="right">{{points}}</i></p>
+      <p><strong>countFigure</strong>:<i class="right">{{countFigure}}</i></p>
+      <p><strong>status</strong>:<i class="right">{{status}}</i></p>
+      <p><button can-click='toggelStop' {{togelStatusEnabled}}>{{toggelStatus}}</button>
+      <button can-click='start' style="float:right">New game</button></p>
   </script>
 </head>
 

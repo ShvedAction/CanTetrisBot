@@ -22,7 +22,11 @@ div{
     height:100%;
     overflow:hidden;
     margin:auto;
-    width:750px;
+    width:550px;
+}
+.right{
+    float:right;
+    display: block;
 }
 p{
     margin:7px;
