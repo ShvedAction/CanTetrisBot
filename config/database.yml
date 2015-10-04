@@ -9,14 +9,6 @@ default: &default
   pool: 5
   timeout: 5000
 
-mypgsql:  
-    adapter: postgresql
-    encoding: unicode
-    pool: 5
-    
-    
-    
-
 
 development:
   <<: *default
@@ -30,7 +22,9 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *mypgsql
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
   host: <%= ENV['PG_DB'] %>
   username: <%= ENV['PG_PASS'] %>
   password: <%= ENV['PG_USER'] %>
