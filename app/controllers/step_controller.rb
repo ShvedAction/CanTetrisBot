@@ -1,15 +1,31 @@
 class StepController < ApplicationController
   
-  protect_from_forgery :except => :new_step 
-  
-  def initialize
-    super
-  end
+  protect_from_forgery :except => [:new_step, :get_game, :edit_game]
+  before_action :get_option_for_user, :get_option_for_game
   
   def new_step
-    get_option_for_user
-    get_option_for_game
-    render json: @user
+    @game.steps.create(params.permit(:hash_of_step).merge({number: @game.steps.size+1}))
+    render json: @game
+  end
+  
+  def get_current_game
+    render json: @game
+  end
+  
+  def new_game
+    session.delete(:user_id)
+    redirect_to "/game"
+  end
+  
+  def edit_game
+    @game.update(params.permit(:points))
+    render json: @game
+  end
+  
+  def game_over
+    @game.update(end_time: DateTime.current);
+    session.delete(:user_id)
+    render json: @game
   end
   
   private

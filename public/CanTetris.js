@@ -1,8 +1,11 @@
 var Figure, field, game, figure, ALL_TYPE_FIGURE;
 var fieldHeight = 30, fieldWidth = 10, fromShifr;
 $(document).ready(function () {
-    game = new (can.Model.extend({}, {
-        score: 0,
+    game = new (can.Model.extend({
+        update: 'POST game/edit',
+        create: 'POST game/edit'
+    }, {
+        points: 0,
         countFigure: 0,
         status: "none",
         toggelStatus: "Pause",
@@ -29,19 +32,23 @@ $(document).ready(function () {
                             this.stop();
                             break;
                     }
+                }else if(value === "points"){
+                    this.save();
                 }
             });
         },
         gameOver: function () {
             this.attr("status", "over");
+            $.get("game/over");
         },
         start: function () {
             field.cleanCell();
             this.nextFigure();
             figure.come_down();
-            this.attr("score", 0);
+            this.attr("points", 0);
             this.attr("countFigure", 0);
             this.attr("status", "in game");
+            $.get("game/new");
         },
         set_period_come_down: function () {
             this.intervalId = setInterval(function () {
@@ -50,7 +57,7 @@ $(document).ready(function () {
         },
         nextFigure: function () {
             figure = new Figure({});
-            this.attr("score", game.score + field.cleanFilledCell() * 10);
+            this.attr("points", game.points + field.cleanFilledCell() * 10);
         },
         stop: function () {
             clearInterval(this.intervalId);
@@ -235,7 +242,7 @@ $(document).ready(function () {
         resultHash = resultHash.replace(/\++$/, '');
         console.log(resultHash);
         fromShifr.fill(resultHash);
-        $.post("/new_step", {hash: resultHash, number_figure: game.countFigure, points: game.score});
+        $.post("/new_step", {hash_of_step: resultHash, number_figure: game.countFigure, points: game.points});
     };
 
 

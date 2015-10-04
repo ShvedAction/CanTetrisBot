@@ -3,6 +3,11 @@ Rails.application.routes.draw do
   get "new_step" => "step#new_step"
   post "new_step" => "step#new_step"
   
+  get "game" =>"step#get_current_game" 
+  get "game/new" =>"step#new_game"  
+  get "game/over" =>"step#game_over"  
+  post "game/edit" =>"step#edit_game"  
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

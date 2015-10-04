@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20150926073829) do
 
   create_table "steps", force: true do |t|
     t.integer  "game_id"
-    t.string   "hash"
+    t.string   "hash_of_step"
     t.integer  "number"
     t.datetime "created_at"
     t.datetime "updated_at"
