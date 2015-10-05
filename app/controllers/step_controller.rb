@@ -18,7 +18,6 @@ class StepController < ApplicationController
   end
   
   def edit_user
-    p params.permit(:nik)
     @user.update(params.permit(:nik))
     render json: @user
   end
@@ -40,9 +39,7 @@ class StepController < ApplicationController
   
   private
     def get_option_for_user
-      p session[:user_id]
       session[:user_id] ||= User.create(host: request.remote_ip, nik: "Please, enter your nik.").id
-      p session[:user_id]
       @user = User.find_by(id: session[:user_id])
     end
     
