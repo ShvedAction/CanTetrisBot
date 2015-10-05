@@ -46,7 +46,6 @@ class StepController < ApplicationController
     def get_option_for_game
       session[:game_id] ||= @user.games.create(number: @user.games.size+1, points: 0).id
       @game = Game.find_by(id: session[:game_id])
-      p @game
     end
     
     #def post_params
