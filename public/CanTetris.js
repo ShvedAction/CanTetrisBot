@@ -88,8 +88,8 @@ $(document).ready(function () {
             }, 1000);
         },
         nextFigure: function () {
-            figure = new Figure({});
             this.attr("points", game.points + field.cleanFilledCell() * 10);
+            figure = new Figure({});
         },
         stop: function () {
             clearInterval(this.intervalId);
@@ -111,7 +111,9 @@ $(document).ready(function () {
                     break;
             }
         }
-    }))({});
+    }))
+    ({});
+    
     ALL_TYPE_FIGURE = [
         [{x: -2, y: 0}, {x: -1, y: 0}, {x: 0, y: 0}, {x: 1, y: 0}],
         [{x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: 0}, {x: 1, y: 0}],
@@ -187,7 +189,7 @@ $(document).ready(function () {
             var _this = this;
             can.each(_this.getPosCells(), function (val) {
                 var cell = field.getXY(val.x, val.y);
-                if (cell && cell.state === "empty") {
+                if (cell.state === "empty") {
                     cell.attr("style_class", "empty");
                 }
             });
