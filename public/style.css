@@ -2,6 +2,18 @@ div{
     display: block;
 }
 
+input{
+    width: 98%;
+}
+
+h3{
+    margin: inherit;
+}
+
+.description{
+    margin-top:20px;
+}
+
 #field {
     height:100%;
     background-color: #000000;
@@ -42,6 +54,7 @@ h1{
 #status{
     float: right;
     margin-left:50px;
+    max-width: 215px;
 }
 .cell{
     /*width:20px;

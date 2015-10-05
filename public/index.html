@@ -16,13 +16,14 @@
       {{/each}}
   </script>
   <script type="text/mustache" id="templateOfStatusGame">
-      <h3>Состояние игры</h3>
+      <h3>State of play</h3>
       <p><user-info target='game_user'></user-info></p>
       <p><strong>points</strong>:<i class="right">{{points}}</i></p>
-      <p><strong>countFigure</strong>:<i class="right">{{countFigure}}</i></p>
+      <p><strong>count of figure</strong>:<i class="right">{{countFigure}}</i></p>
       <p><strong>status</strong>:<i class="right">{{status}}</i></p>
       <p><button can-click='toggelStop' {{togelStatusEnabled}}>{{toggelStatus}}</button>
       <button can-click='start' style="float:right">New game</button></p>
+      <p class="description">Thank you for your play. Your results will be used for training nerual network.</p>
   </script>
 </head>
 
@@ -38,7 +39,7 @@
         
     </div>
     <div id="status">
-        s
+        
     </div>
  </div>
 </body>
